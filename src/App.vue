@@ -13,29 +13,33 @@ const todos_asc = computed(() =>
   })
 );
 
-const addTodo = () =>{
-  if (input_content.value.trim() === '' || input_category.value === null){
-    return
+const addTodo = () => {
+  if (input_content.value.trim() === "" || input_category.value === null) {
+    return;
   }
 
   todos.value.push({
     content: input_content.value,
     category: input_category.value,
     done: false,
-    createdAt: new Date().getTime()
-  })
+    createdAt: new Date().getTime(),
+  });
 
-  input_content.value = ''
-  input_category.value = null
-}
+  input_content.value = "";
+  input_category.value = null;
+};
 
-const removeTodo = todo => {
-  todos.value = todos.value.filter(t => t !== todo)
-}
+const removeTodo = (todo) => {
+  todos.value = todos.value.filter((t) => t !== todo);
+};
 
-watch(todos, newVal => {
-  localStorage.setItem('todos', JSON.stringify(newVal))
-}, {deep: true})
+watch(
+  todos,
+  (newVal) => {
+    localStorage.setItem("todos", JSON.stringify(newVal));
+  },
+  { deep: true }
+);
 
 watch(name, (newVal) => {
   localStorage.setItem("name", newVal);
@@ -43,7 +47,7 @@ watch(name, (newVal) => {
 
 onMounted(() => {
   name.value = localStorage.getItem("name") || "";
-  todos.value = JSON.parse(localStorage.getItem('todos')) || []
+  todos.value = JSON.parse(localStorage.getItem("todos")) || [];
 });
 </script>
 
@@ -59,7 +63,6 @@ onMounted(() => {
       <h3>CREATE A TODO</h3>
 
       <form @submit.prevent="addTodo">
-
         <h4>What's on your todo list?</h4>
 
         <input
@@ -92,7 +95,6 @@ onMounted(() => {
             />
             <span class="bubble personal"></span>
           </label>
-
         </div>
 
         <input type="submit" value="Add todo" />
@@ -102,20 +104,24 @@ onMounted(() => {
     <section class="todo-list">
       <h3>TODO LIST</h3>
       <div class="list">
-        <div v-for="todo in todos_asc" v-bind:key="todo" :class="`todo-item ${todo.done && 'done'}`" >
-            <label>
-              <input type="checkbox" v-model="todo.done">
-              <span :class="`bubble ${todo.category}`" ></span>
-            </label>
+        <div
+          v-for="todo in todos_asc"
+          v-bind:key="todo"
+          :class="`todo-item ${todo.done && 'done'}`"
+        >
+          <label>
+            <input type="checkbox" v-model="todo.done" />
+            <span :class="`bubble ${todo.category}`"></span>
+          </label>
 
-            <div class="todo-content">
-              <input type="text" v-model="todo.content" />
-            </div>
-
-            <div class="actions">
-              <button class="delete" @click="removeTodo(todo)">Delete</button>
-            </div>
+          <div class="todo-content">
+            <input type="text" v-model="todo.content" />
           </div>
+
+          <div class="actions">
+            <button class="delete" @click="removeTodo(todo)">Delete</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
